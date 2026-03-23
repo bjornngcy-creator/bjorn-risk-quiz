@@ -160,6 +160,7 @@ export default function Home() {
   const [answered, setAnswered] = useState(false)
   const [selectedIdx, setSelectedIdx] = useState(null)
   const [profile, setProfile] = useState(null)
+  const [answers, setAnswers] = useState([])
   const [coachingAnswer, setCoachingAnswer] = useState(null) // null | true | false
 
   const progress = screen === 'quiz' ? (currentQ / QUESTIONS.length) * 100 : screen === 'results' ? 100 : 0
@@ -182,6 +183,8 @@ export default function Home() {
     const newScore = score + q.options[idx].pts
     setScore(newScore)
     setAck(q.acks[idx])
+    const newAnswers = [...answers, q.options[idx].label]
+    setAnswers(newAnswers)
 
     setTimeout(() => {
       if (currentQ + 1 < QUESTIONS.length) {
@@ -210,6 +213,7 @@ export default function Home() {
           score,
           profile: profile?.key,
           coachingInterest: yes,
+          answers,
         }),
       })
     } catch (e) {
