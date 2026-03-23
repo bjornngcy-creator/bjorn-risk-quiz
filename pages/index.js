@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 
 const QUESTIONS = [
@@ -161,8 +161,6 @@ export default function Home() {
   const [selectedIdx, setSelectedIdx] = useState(null)
   const [profile, setProfile] = useState(null)
   const [coachingAnswer, setCoachingAnswer] = useState(null) // null | true | false
-  const [submitted, setSubmitted] = useState(false)
-  const submitCalledRef = useRef(false)
 
   const progress = screen === 'quiz' ? (currentQ / QUESTIONS.length) * 100 : screen === 'results' ? 100 : 0
 
@@ -194,31 +192,8 @@ export default function Home() {
         const p = getProfile(newScore)
         setProfile(p)
         setScreen('results')
-        submitResult(newScore, p.key, null)
       }
     }, 900)
-  }
-
-  async function submitResult(finalScore, profileKey, coaching) {
-    if (submitCalledRef.current) return
-    submitCalledRef.current = true
-    try {
-      await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone ? `${phoneCode} ${phone}` : '',
-          score: finalScore,
-          profile: profileKey,
-          coachingInterest: coaching,
-        }),
-      })
-      setSubmitted(true)
-    } catch (e) {
-      console.error(e)
-    }
   }
 
   async function handleCoaching(yes) {
