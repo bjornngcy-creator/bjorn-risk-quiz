@@ -21,3 +21,37 @@ a { color: inherit; }
 button { cursor: pointer; font-family: inherit; }
 
 input, select { font-family: inherit; }
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.coaching-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.quiz-fade {
+  transition: opacity 0.25s ease;
+}
+
+@media (max-width: 520px) {
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .coaching-btns {
+    flex-direction: column;
+  }
+
+  .cta-card {
+    padding: 16px;
+  }
+
+  .score-badge {
+    font-size: 12px;
+  }
+}

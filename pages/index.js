@@ -161,6 +161,7 @@ export default function Home() {
   const [selectedIdx, setSelectedIdx] = useState(null)
   const [profile, setProfile] = useState(null)
   const [answers, setAnswers] = useState([])
+  const [quizVisible, setQuizVisible] = useState(true)
   const [coachingAnswer, setCoachingAnswer] = useState(null) // null | true | false
 
   const progress = screen === 'quiz' ? (currentQ / QUESTIONS.length) * 100 : screen === 'results' ? 100 : 0
@@ -187,17 +188,21 @@ export default function Home() {
     setAnswers(newAnswers)
 
     setTimeout(() => {
-      if (currentQ + 1 < QUESTIONS.length) {
-        setCurrentQ(currentQ + 1)
-        setAnswered(false)
-        setSelectedIdx(null)
-        setAck('')
-      } else {
-        const p = getProfile(newScore)
-        setProfile(p)
-        setScreen('results')
-      }
-    }, 900)
+      setQuizVisible(false)
+      setTimeout(() => {
+        if (currentQ + 1 < QUESTIONS.length) {
+          setCurrentQ(currentQ + 1)
+          setAnswered(false)
+          setSelectedIdx(null)
+          setAck('')
+        } else {
+          const p = getProfile(newScore)
+          setProfile(p)
+          setScreen('results')
+        }
+        setQuizVisible(true)
+      }, 280)
+    }, 620)
   }
 
   async function handleCoaching(yes) {
@@ -250,7 +255,7 @@ export default function Home() {
                 <p style={{ ...styles.introPara, marginBottom: 0 }}>Take 2 minutes to answer a few quick questions. Be honest with yourself.</p>
               </div>
 
-              <div style={styles.inputRow}>
+              <div className="input-row">
                 <div style={styles.inputGroup}>
                   <label style={styles.label}>Your name</label>
                   <input style={styles.input} type="text" placeholder="e.g. Sarah" value={name} onChange={e => setName(e.target.value)} />
@@ -290,7 +295,7 @@ export default function Home() {
 
           {/* ── QUIZ ── */}
           {screen === 'quiz' && (
-            <div>
+            <div className="quiz-fade" style={{ opacity: quizVisible ? 1 : 0 }}>
               <p style={styles.qCounter}>Question {currentQ + 1} of {QUESTIONS.length}</p>
               <p style={styles.qText}>{QUESTIONS[currentQ].text}</p>
               <div style={styles.optionsList}>
@@ -311,7 +316,7 @@ export default function Home() {
           {/* ── RESULTS ── */}
           {screen === 'results' && profile && (
             <div>
-              <div style={styles.scoreBadge}>Your score: <strong style={styles.scoreNum}>{score}</strong> / 34</div>
+              <div className="score-badge" style={styles.scoreBadge}>Your score: <strong style={styles.scoreNum}>{score}</strong> / 34</div>
               <h2 style={styles.profileLabel}>{profile.label}</h2>
               <div style={styles.profileIntro}>
                 {profile.intro.map((p, i) => <p key={i} style={{ marginBottom: 6 }}>{p}</p>)}
@@ -325,7 +330,7 @@ export default function Home() {
               <hr style={styles.divider} />
 
               {/* Coaching CTA */}
-              <div style={styles.ctaCard}>
+              <div className="cta-card" style={styles.ctaCard}>
                 <h3 style={styles.ctaH3}>Would you be open to a quick personal call with me?</h3>
                 <p style={styles.ctaBody}>Here's what we'd do together:</p>
                 <div style={{ marginBottom: 20 }}>
@@ -334,7 +339,7 @@ export default function Home() {
                   <BulletItem text="It also helps me collect real data and insights for my future content and research" />
                 </div>
                 {coachingAnswer === null ? (
-                  <div style={styles.coachingBtns}>
+                  <div className="coaching-btns">
                     <button style={styles.btnYes} onClick={() => handleCoaching(true)}>Yes, I'm open to it</button>
                     <button style={styles.btnNo} onClick={() => handleCoaching(false)}>Maybe another time</button>
                   </div>
@@ -346,7 +351,7 @@ export default function Home() {
               </div>
 
               {/* Telegram CTA */}
-              <div style={styles.ctaCard}>
+              <div className="cta-card" style={styles.ctaCard}>
                 <h3 style={styles.ctaH3}>Want exclusive market insights? Join my Telegram below!</h3>
                 <p style={styles.ctaBody}>I share market analysis, my personal investing playbook, and free resources — giving you the edge most retail investors never get and helping you invest smarter.</p>
                 <a href="https://t.me/investwithbjorn" target="_blank" rel="noopener noreferrer" style={styles.tgLink}>
