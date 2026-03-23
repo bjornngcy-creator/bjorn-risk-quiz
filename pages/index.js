@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
 const QUESTIONS = [
@@ -161,8 +161,10 @@ export default function Home() {
   const [selectedIdx, setSelectedIdx] = useState(null)
   const [profile, setProfile] = useState(null)
   const [answers, setAnswers] = useState([])
-  const [quizVisible, setQuizVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
   const [coachingAnswer, setCoachingAnswer] = useState(null) // null | true | false
+
+  useEffect(() => { setVisible(true) }, [])
 
   const progress = screen === 'quiz' ? (currentQ / QUESTIONS.length) * 100 : screen === 'results' ? 100 : 0
 
@@ -173,7 +175,11 @@ export default function Home() {
       return
     }
     setIntroError(false)
-    setScreen('quiz')
+    setVisible(false)
+    setTimeout(() => {
+      setScreen('quiz')
+      setVisible(true)
+    }, 280)
   }
 
   function selectOption(idx) {
@@ -188,7 +194,7 @@ export default function Home() {
     setAnswers(newAnswers)
 
     setTimeout(() => {
-      setQuizVisible(false)
+      setVisible(false)
       setTimeout(() => {
         if (currentQ + 1 < QUESTIONS.length) {
           setCurrentQ(currentQ + 1)
@@ -200,7 +206,7 @@ export default function Home() {
           setProfile(p)
           setScreen('results')
         }
-        setQuizVisible(true)
+        setVisible(true)
       }, 280)
     }, 620)
   }
@@ -243,6 +249,8 @@ export default function Home() {
           <div style={styles.progressBar}>
             <div style={{ ...styles.progressFill, width: `${progress}%` }} />
           </div>
+
+          <div className="quiz-fade" style={{ opacity: visible ? 1 : 0 }}>
 
           {/* ── INTRO ── */}
           {screen === 'intro' && (
@@ -295,7 +303,7 @@ export default function Home() {
 
           {/* ── QUIZ ── */}
           {screen === 'quiz' && (
-            <div className="quiz-fade" style={{ opacity: quizVisible ? 1 : 0 }}>
+            <div>
               <p style={styles.qCounter}>Question {currentQ + 1} of {QUESTIONS.length}</p>
               <p style={styles.qText}>{QUESTIONS[currentQ].text}</p>
               <div style={styles.optionsList}>
@@ -363,6 +371,8 @@ export default function Home() {
               <p style={styles.disclaimer}>This is for education and self-awareness only, not financial advice.</p>
             </div>
           )}
+
+          </div>{/* end fade wrapper */}
         </div>
       </div>
     </>
