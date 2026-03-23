@@ -121,7 +121,7 @@ const PROFILES = {
   },
   moderate: {
     label: '🟡 Moderate Risk (17 – 25)',
-    intro: ['This is where most of you will fall.', "You want growth, but you don't want to get destroyed in the process."],
+    intro: ["You want growth, but you don't want to get destroyed in the process."],
     meaning: ["You're trying to balance opportunity and risk"],
     portfolio: ['Core positions in strong companies and ETFs', 'Add some growth names on top', "Don't go all-in on hype"],
     struggleLabel: 'Common mistake here',
@@ -334,29 +334,9 @@ export default function Home() {
               </div>
 
               <div style={styles.sectionBlock}>
-                <div style={styles.sectionLabel}>What this means</div>
-                {profile.meaning.map((item, i) => <BulletItem key={i} text={item} />)}
-              </div>
-
-              <div style={styles.sectionBlock}>
                 <div style={styles.sectionLabel}>Portfolio direction</div>
                 {profile.portfolio.map((item, i) => <BulletItem key={i} text={item} />)}
               </div>
-
-              <div style={styles.sectionBlock}>
-                <div style={styles.sectionLabel}>{profile.struggleLabel}</div>
-                {profile.struggles.map((item, i) => <BulletItem key={i} text={item} muted />)}
-                <div style={styles.edgeBox}>{profile.edge}</div>
-              </div>
-
-              <hr style={styles.divider} />
-
-              <div style={styles.reflectionBox}>
-                <div style={styles.reflectionLabel}>Based on your answers, your biggest risk is likely</div>
-                <p style={styles.reflectionText}>{profile.reflection}</p>
-              </div>
-
-              <p style={styles.closingQuote}>"At the end of the day, the best portfolio is one you can actually stick with. Markets will always test you. Your job is not to predict everything — your job is to stay in the game."</p>
 
               <hr style={styles.divider} />
 
