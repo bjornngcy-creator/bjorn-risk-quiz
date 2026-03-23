@@ -165,7 +165,8 @@ export default function Home() {
   const progress = screen === 'quiz' ? (currentQ / QUESTIONS.length) * 100 : screen === 'results' ? 100 : 0
 
   function startQuiz() {
-    if (!name.trim() || !email.trim() || !email.includes('@')) {
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+    if (!name.trim() || !email.trim() || !emailValid) {
       setIntroError(true)
       return
     }
@@ -273,7 +274,11 @@ export default function Home() {
                 </div>
               </div>
 
-              {introError && <p style={styles.errorMsg}>Please fill in your name and email to continue.</p>}
+              {introError && (
+                <p style={styles.errorMsg}>
+                  {!name.trim() ? 'Please fill in your name.' : !email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ? 'Please enter a valid email address (e.g. sarah@gmail.com).' : 'Please fill in your name and email to continue.'}
+                </p>
+              )}
 
               <button style={styles.btnPrimary} onClick={startQuiz}>Start the quiz →</button>
             </div>
